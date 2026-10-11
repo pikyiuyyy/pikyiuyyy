@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>旅遊行程小繪本｜行程網站</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Huninn:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --paper:#FFFCF6;
+      --ink:#3E3A39;
+      --coral:#F2A497;
+      --sun:#F6D27A;
+      --sea:#A8D3E6;
+      --bamboo:#B9DAA5;
+
+      --radius:22px;
+      --radius-lg:28px;
+
+      --stroke:3px;
+      --shadow: 0 10px 0 rgba(62,58,57,0.07);
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Huninn", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.35;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* 讓整體看起來像日系繪本紙張的輕微邊框感 */
+    .frame{
+      min-height: 100%;
+      padding-bottom: 40px;
+      position: relative;
+    }
+    .frame::before{
+      content:"";
+      position:absolute;
+      inset: 0;
+      border: 0;
+      pointer-events:none;
+    }
+
+    .container{
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 14px;
+    }
+
+    /* ===== 頂端固定選單 ===== */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,252,246,0.88);
+      backdrop-filter: blur(6px);
+      border-bottom: var(--stroke) solid var(--ink);
+    }
+    .topbar-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 6px;
+      gap: 10px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 160px;
+    }
+    .brand-badge{
+      width: 38px;
+      height: 38px;
+      border: var(--stroke) solid var(--ink);
+      border-radius: 14px;
+      background: #fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+    .brand-title{
+      display:flex;
+      flex-direction:column;
+      gap: 2px;
+    }
+    .brand-title strong{ font-size: 14px; letter-spacing: 0.5px; }
+    .brand-title span{ font-size: 12px; opacity: 0.9; }
+
+    .nav{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+    .nav a{
+      text-decoration:none;
+      color: var(--ink);
+      border: var(--stroke) solid var(--ink);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 13px;
+      background: #fff;
+      box-shadow: 0 6px 0 rgba(62,58,57,0.06);
+      transition: transform .12s ease;
+      touch-action: manipulation;
+    }
+    .nav a:active{ transform: translateY(2px); }
+
+    /* ===== 區塊 ===== */
+    section{
+      padding: 18px 0 0;
+    }
+    .card{
+      border: var(--stroke) solid var(--ink);
+      border-radius: var(--radius-lg);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .card-pad{
+      padding: 16px;
+    }
+
+    /* ===== 首頁：插圖＋標題＋出發倒數 ===== */
+    .hero{
+      margin-top: 14px;
+      overflow:hidden;
+      position: relative;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 16px;
+      align-items:center;
+    }
+    .hero-title{
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+    }
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      width: fit-content;
+      padding: 8px 12px;
+      border: var(--stroke) solid var(--ink);
+      border-radius: 999px;
+      background: var(--paper);
+      font-size: 13px;
+    }
+    .h1{
+      margin:0;
+      font-size: 26px;
+      letter-spacing: 0.5px;
+      line-height: 1.15;
+    }
+    .sub{
+      margin:0;
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .countdown{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .countdown-row{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .time-pill{
+      flex: 1 1 110px;
+      border: var(--stroke) solid var(--ink);
+      border-radius: 18px;
+      background: var(--paper);
+      padding: 10px 12px;
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+      min-width: 110px;
+    }
+    .time-pill .num{
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .time-pill .lbl{
+      font-size: 12px;
+      opacity: 0.95;
+    }
+    .cta-row{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .btn{
+      appearance:none;
+      border: var(--stroke) solid var(--ink);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background:#fff;
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 6px 0 rgba(62,58,57,0.06);
+      transition: transform .12s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      touch-action: manipulation;
+    }
+    .btn:active{ transform: translateY(2px); }
+    .btn-primary{
+      background: var(--coral);
+    }
+
+    .hero-illu{
+      width: 100%;
+      height: 260px;
+      border: var(--stroke) solid var(--ink);
+      border-radius: var(--radius);
+      background: var(--paper);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      position: relative;
+    }
+
+    /* 輕輕動的插圖（尊重 reduced motion） */
+    @keyframes floaty {
+      0%{ transform: translateY(0px) rotate(0deg); }
+      50%{ transform: translateY(-6px) rotate(-1deg); }
+      100%{ transform: translateY(0px) rotate(0deg); }
+    }
+    @keyframes bobble {
+      0%{ transform: translateX(0px); }
+      50%{ transform: translateX(6px); }
+      100%{ transform: translateX(0px); }
+    }
+
+    /* 彈跳效果（切換日期） */
+    @keyframes popBounce {
+      0%{ transform: translateY(0) scale(1); }
+      30%{ transform: translateY(-8px) scale(1.02); }
+      60%{ transform: translateY(2px) scale(0.99); }
+      100%{ transform: translateY(0) scale(1); }
+    }
+
+    .reduce-motion *{
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+
+    /* ===== 標題小插圖區（彈跳時會套用到它） ===== */
+    .bubble-anim{
+      transform-origin: 50% 50%;
+    }
+
+    /* ===== 航班卡片 ===== */
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin: 14px 0 10px;
+    }
+    .section-title h2{
+      margin:0;
+      font-size: 18px;
+      letter-spacing: 0.3px;
+    }
+    .section-title .hint{
+      font-size: 12px;
+      opacity: 0.95;
+      border: var(--stroke) solid var(--ink);
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: var(--paper);
+      white-space: nowrap;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .flight{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 14px;
+    }
+    .flight-top{
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap: wrap;
+    }
+    .flight-left{
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+      min-width: 220px;
+    }
+    .flight-icon{
+      width: 52px;
+      height: 52px;
+      border: var(--stroke) solid var(--ink);
+      border-radius: 18px;
+      background: var(--paper);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+    .flight-meta{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+    }
+    .flight-meta strong{ font-size: 16px; }
+    .flight-meta .line{
+      font-size: 13px;
+      opacity: 0.97;
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 7px 10px;
+      border: var(--stroke) solid var(--ink);
+      border-radius: 999px;
+      background: var(--paper);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .tag.coral{ background: rgba(242,164,151,0.28); }
+    .tag.sun{ background: rgba(246,210,122,0.30); }
+    .tag.sea{ background: rgba(168,211,230,0.28); }
+    .tag.bamboo{ background: rgba(185,218,165,0.28); }
+
+    .flight-body{
+      border-top: var(--stroke) dashed rgba(62,58,57,0.35);
+      padding-top: 12px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .flight-row{
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+    .flight-row b{ font-size: 13px; }
+
+    /* ===== 每日行程（日期切換 + 時間軸） ===== */
+    .day-switch{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+    .day-btn{
+      cursor:pointer;
+      border: var(--stroke) solid var(--ink);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: #fff;
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 13px;
+      box-shadow: 0 6px 0 rgba(62,58,57,0.06);
+      touch-action: manipulation;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .day-btn:active{ transform: translateY(2px); }
+    .day-btn[aria-selected="true"]{
+      background: var(--sea);
+    }
+
+    .timeline{
+      padding: 14px;
+    }
+    .timeline-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .timeline-top .left{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      min-width: 240px;
+    }
+    .timeline-top .left strong{
+      font-size: 16px;
+    }
+    .timeline-top .left span{
+      font-size: 13px;
+      opacity: 0.96;
+    }
+
+    .timeline-body{
+      display:grid;
+      grid-template-columns: 30px 1fr;
+      gap: 10px;
+      position: relative;
+    }
+    .timeline-body::before{
+      content:"";
+      position:absolute;
+      left: 14px;
+      top: 44px;
+      bottom: 10px;
+      width: var(--stroke);
+      background: var(--ink);
+      border-radius: 999px;
+      opacity: 0.75;
+    }
+
+    .timeline-item{
+      display: contents;
+    }
+    .t-dot{
+      width: 30px;
+      height: 30px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 2;
+    }
+    .t-dot .circle{
+      width: 20px;
+      height: 20px;
+      border: var(--stroke) solid var(--ink);
+      border-radius: 999px;
+      background: var(--paper);
+      position: relative;
+    }
+    .t-dot .circle::after{
+      content:"";
+      position:absolute;
+      inset: 4px;
+      border-radius: 999px;
+      background: var(--sea);
+      opacity: 0.25;
+    }
+
+    .t-card{
+      border: var(--stroke) solid var(--ink);
+      border-radius: 18px;
+      padding: 12px 12px 11px;
+      background: #fff;
+      box-shadow: 0 6px 0 rgba(62,58,57,0.05);
+      position: relative;
+      z-index: 2;
+    }
+    .t-head{
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:flex-start;
+    }
+    .t-time{
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: var(--stroke) solid var(--ink);
+      background: var(--paper);
+    }
+    .t-transport{
+      display:flex;
+      gap: 8px;
+      align-items:center;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+    .t-transport .mini{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: var(--stroke) solid var(--ink);
+      font-weight: 800;
+      white-space: nowrap;
+      background: var(--paper);
+    }
+    .mini.coral{ background: rgba(242,164,151,0.28); }
+    .mini.sun{ background: rgba(246,210,122,0.30); }
+    .mini.sea{ background: rgba(168,211,230,0.28); }
+    .mini.bamboo{ background: rgba(185,218,165,0.28); }
+
+    .t-place{
+      margin-top: 8px;
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+    .t-place strong{
+      font-size: 15px;
+      letter-spacing: 0.2px;
+    }
+    .badge-go{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: var(--stroke) solid var(--ink);
+      background: rgba(246,210,122,0.35);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .t-desc{
+      margin-top: 6px;
+      font-size: 13px;
+      opacity: 0.98;
+    }
+
+    .t-bullets{
+      margin: 8px 0 0;
+      padding-left: 18px;
+      font-size: 13px;
+      opacity: 0.98;
+    }
+    .t-bullets li{ margin: 4px 0; }
+
+    /* ===== 待辦 + 住宿 ===== */
+    .two-col{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .checklist{
+      padding: 14px;
+    }
+    .checklist-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .checklist-header strong{ font-size: 16px; }
+    .checklist-header span{
+      font-size: 12px;
+      opacity: 0.95;
+      border: var(--stroke) solid var(--ink);
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: var(--paper);
+      white-space: nowrap;
+    }
+    .checks{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .check-item{
+      border: var(--stroke) solid var(--ink);
+      border-radius: 18px;
+      background: #fff;
+      padding: 12px;
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+      box-shadow: 0 6px 0 rgba(62,58,57,0.05);
+    }
+    .check-item input{
+      margin-top: 2px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--bamboo);
+      cursor:pointer;
+      flex: 0 0 auto;
+    }
+    .check-item label{
+      cursor:pointer;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .check-item .meta{
+      margin-top: 6px;
+      font-size: 12px;
+      opacity: 0.95;
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .stay{
+      padding: 14px;
+    }
+    .stay .header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .stay .header strong{ font-size: 16px; }
+    .stay .header .pill{
+      border: var(--stroke) solid var(--ink);
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(168,211,230,0.25);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .stay-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .stay-card{
+      border: var(--stroke) solid var(--ink);
+      border-radius: 18px;
+      background: #fff;
+      padding: 12px;
+      box-shadow: 0 6px 0 rgba(62,58,57,0.05);
+    }
+    .stay-card .row{
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:flex-start;
+    }
+    .stay-card strong{
+      font-size: 14px;
+    }
+    .stay-card .small{
+      margin-top: 6px;
+      font-size: 13px;
+      opacity: 0.98;
+    }
+
+    /* ===== 底部 ===== */
+    footer{
+      padding: 18px 0 0;
+      opacity: 0.95;
+    }
+    .footer-note{
+      border: var(--stroke) solid var(--ink);
+      border-radius: 22px;
+      background: #fff;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+    }
+
+    /* ===== 桌機：兩欄 ===== */
+    @media (min-width: 860px){
+      .hero-grid{
+        grid-template-columns: 1.1fr 0.9fr;
+      }
+      .grid-2{
+        grid-template-columns: 1fr 1fr;
+      }
+      .flight{
+        grid-template-columns: 1fr;
+      }
+      .two-col{
+        grid-template-columns: 1fr 1fr;
+      }
+      .stay-grid{
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="frame" id="app">
+    <!-- 頂端固定選單 -->
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="brand" aria-label="網站品牌">
+          <div class="brand-badge" aria-hidden="true">
+            <!-- 小章章：紙飛機 -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="紙飛機">
+              <path d="M21 3L3.5 10.3L10.2 13.2L13 20L21 3Z" fill="#F6D27A" stroke="#3E3A39" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M10.2 13.2L21 3" stroke="#3E3A39" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="brand-title">
+            <strong>小繪本旅行行程</strong>
+            <span>日系可愛｜輕鬆好用</span>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="導覽列">
+          <a href="#home">首頁</a>
+          <a href="#flights">航班</a>
+          <a href="#schedule">每日行程</a>
+          <a href="#todo">待辦＆住宿</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- 首頁 -->
+      <section id="home">
+        <div class="card hero" role="region" aria-label="首頁">
+          <div class="hero-grid">
+            <div class="hero-title">
+              <div class="kicker">
+                <!-- 小章章：星星 -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 2l2.9 7.3L22 12l-7.1 2.7L12 22l-2.9-7.3L2 12l7.1-2.7L12 2z" fill="rgba(242,164,151,0.35)" stroke="#3E3A39" stroke-width="2"/>
+                </svg>
+                你的旅行：可愛版行程
+              </div>
+
+              <h1 class="h1" id="tripTitle">東京風景小冒險</h1>
+              <p class="sub" id="tripSubtitle">三天兩夜，搭著交通小夥伴，一站一站打卡「必去」。</p>
+
+              <div class="countdown" aria-label="出發倒數">
+                <div class="countdown-row">
+                  <div class="time-pill">
+                    <div class="num" id="cdDays">--</div>
+                    <div class="lbl">天</div>
+                  </div>
+                  <div class="time-pill">
+                    <div class="num" id="cdHours">--</div>
+                    <div class="lbl">小時</div>
+                  </div>
+                  <div class="time-pill">
+                    <div class="num" id="cdMinutes">--</div>
+                    <div class="lbl">分鐘</div>
+                  </div>
+                  <div class="time-pill">
+                    <div class="num" id="cdSeconds">--</div>
+                    <div class="lbl">秒</div>
+                  </div>
+                </div>
+
+                <div class="cta-row">
+                  <a class="btn btn-primary" href="#schedule" aria-label="跳到每日行程">
+                    <!-- 小圖：路線 -->
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M6 19c2.5 0 3-1.5 3-3s.5-3 3-3 3-1.5 3-3" stroke="#3E3A39" stroke-width="2" stroke-linecap="round"/>
+                      <path d="M6 19a2 2 0 1 1 0-4a2 2 0 0 1 0 4Z" fill="rgba(168,211,230,0.35)" stroke="#3E3A39" stroke-width="2"/>
+                      <path d="M18 9a2 2 0 1 1 0-4a2 2 0 0 1 0 4Z" fill="rgba(242,164,151,0.35)" stroke="#3E3A39" stroke-width="2"/>
+                    </svg>
+                    開始看行程
+                  </a>
+                  <button class="btn" id="resetChecksBtn" type="button" aria-label="重置待辦勾勾">
+                    <!-- 小圖：回到原點 -->
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M21 12a9 9 0 1 1-2.64-6.36" stroke="#3E3A39" stroke-width="2" stroke-linecap="round"/>
+                      <path d="M21 3v6h-6" stroke="#3E3A39" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    重置待辦
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-illu bubble-anim" id="heroIllustrationWrap" aria-label="插圖（輕輕動）">
+              <!-- 用 SVG 自己畫插圖：地標＋交通工具＋風景（以「東京」作示例） -->
+              <svg id="heroIllustration" width="100%" height="100%" viewBox="0 0 420 260" role="img" aria-label="東京小繪本插圖">
+                <!-- 雲 -->
+                <g opacity="1">
+                  <path d="M70 62c0-14 18-20 29-10c6-10 24-10 29 2c16-2 26 11 19 25c-3 6-10 10-20 10H97c-16 0-27-10-27-27Z" fill="rgba(168,211,230,0.30)" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+                  <path d="M285 55c0-12 16-18 26-10c5-9 20-9 25 2c14-2 22 10 17 22c-3 6-9 10-18 10h-46c-15 0-24-9-24-24Z" fill="rgba(246,210,122,0.32)" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+                </g>
+
+                <!-- 地面 -->
+                <path d="M40 208c40-28 78-20 115-6c20 8 42 18 70 16c42-3 62-25 105-10c13 4 25 9 40 16v28H40v-44Z" fill="rgba(185,218,165,0.35)" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+
+                <!-- 富士山（地標） -->
+                <g id="mountFuji" class="floaty">
+                  <path d="M165 198L230 68l65 130H165Z" fill="rgba(246,210,122,0.42)" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+                  <path d="M230 88l35 70H195l35-70Z" fill="rgba(242,164,151,0.26)" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+                  <path d="M222 120c2-5 10-5 12 0" fill="none" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+                </g>
+
+                <!-- 東京塔 / 塔（交通與地標） -->
+                <g id="tokyoTower" class="bobble">
+                  <path d="M255 198V116h-20v82h-10V102l40-10l40 10v96h-10v-82h-20v82h-20Z" fill="rgba(242,164,151,0.22)" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+                  <path d="M225 142h70" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M235 165h50" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+                  <circle cx="250" cy="198" r="6" fill="rgba(168,211,230,0.35)" stroke="#3E3A39" stroke-width="3"/>
+                </g>
+
+                <!-- 車子：小列車 -->
+                <g id="train" class="floaty">
+                  <path d="M115 165c0-16 13-29 29-29h78c16 0 29 13 29 29v26c0 10-8 18-18 18h-100c-10 0-18-8-18-18v-26Z" fill="rgba(168,211,230,0.25)" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+                  <path d="M148 150h60" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+                  <rect x="150" y="139" width="56" height="10" rx="5" fill="rgba(246,210,122,0.35)" stroke="#3E3A39" stroke-width="3"/>
+                  <circle cx="160" cy="202" r="10" fill="rgba(185,218,165,0.35)" stroke="#3E3A39" stroke-width="3"/>
+                  <circle cx="220" cy="202" r="10" fill="rgba(185,218,165,0.35)" stroke="#3E3A39" stroke-width="3"/>
+                  <path d="M190 182c0-8 6-14 14-14" fill="none" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+                </g>
+
+                <!-- 水滴/風的點點 -->
+                <g opacity="0.9">
+                  <circle cx="55" cy="120" r="6" fill="rgba(242,164,151,0.35)" stroke="#3E3A39" stroke-width="3"/>
+                  <circle cx="92" cy="105" r="4" fill="rgba(168,211,230,0.35)" stroke="#3E3A39" stroke-width="3"/>
+                  <circle cx="330" cy="128" r="6" fill="rgba(246,210,122,0.35)" stroke="#3E3A39" stroke-width="3"/>
+                </g>
+
+                <!-- 文字小標籤：可愛手繪感 -->
+                <g>
+                  <path d="M55 185c12-8 26-6 40 2" fill="none" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M54 182c0 16 0 16 0 16" fill="none" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 航班卡片 -->
+      <section id="flights" aria-label="航班資訊">
+        <div class="section-title">
+          <h2>航班卡片</h2>
+          <div class="hint">示例資料：你可以把內容替換成自己的航班</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card flight" role="article" aria-label="去程">
+            <div class="flight-top">
+              <div class="flight-left">
+                <div class="flight-icon" aria-hidden="true">
+                  <!-- 飛機 -->
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M2.5 13.5L21 3.5l-6 17-2.7-6.1L2.5 13.5Z" fill="rgba(246,210,122,0.35)" stroke="#3E3A39" stroke-width="2.5" stroke-linejoin="round"/>
+                    <path d="M10.3 14.4l2.7 6.1" stroke="#3E3A39" stroke-width="2.5" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="flight-meta">
+                  <strong>去程</strong>
+                  <div class="line">
+                    <span><b>航班：</b>BR 108</span>
+                    <span><b>座位：</b>經濟艙</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tag sun" aria-label="時段標籤">
+                <span aria-hidden="true">☀️</span> 白天
+              </div>
+            </div>
+
+            <div class="flight-body">
+              <div class="flight-row">
+                <span>出發</span>
+                <b>2026/10/20 09:40</b>
+              </div>
+              <div class="flight-row">
+                <span>地點</span>
+                <b>TPE → NRT</b>
+              </div>
+              <div class="flight-row">
+                <span>預計抵達</span>
+                <b>2026/10/20 15:10</b>
+              </div>
+            </div>
+          </div>
+
+          <div class="card flight" role="article" aria-label="回程">
+            <div class="flight-top">
+              <div class="flight-left">
+                <div class="flight-icon" aria-hidden="true">
+                  <!-- 返程飛機 -->
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M21.5 13.5L3 3.5l6 17 2.7-6.1 9.8-.8Z" fill="rgba(242,164,151,0.35)" stroke="#3E3A39" stroke-width="2.5" stroke-linejoin="round"/>
+                    <path d="M13.7 14.4L11 20.5" stroke="#3E3A39" stroke-width="2.5" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="flight-meta">
+                  <strong>回程</strong>
+                  <div class="line">
+                    <span><b>航班：</b>BR 109</span>
+                    <span><b>座位：</b>經濟艙</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tag coral" aria-label="時段標籤">
+                <span aria-hidden="true">🌙</span> 晚上
+              </div>
+            </div>
+
+            <div class="flight-body">
+              <div class="flight-row">
+                <span>出發</span>
+                <b>2026/10/22 19:30</b>
+              </div>
+              <div class="flight-row">
+                <span>地點</span>
+                <b>NRT → TPE</b>
+              </div>
+              <div class="flight-row">
+                <span>預計抵達</span>
+                <b>2026/10/23 00:20</b>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 每日行程 -->
+      <section id="schedule" aria-label="每日行程">
+        <div class="section-title">
+          <h2>每日行程</h2>
+          <div class="hint">日期切換會有彈跳效果（支援減少動態）</div>
+        </div>
+
+        <div class="card timeline" role="region" aria-label="時間軸與行程">
+          <div class="timeline-top">
+            <div class="left">
+              <strong>今天要去哪些地方？</strong>
+              <span id="daySubtitle">選擇日期開始</span>
+            </div>
+
+            <div class="day-switch" role="tablist" aria-label="日期切換">
+              <!-- 由 JS 建立 -->
+            </div>
+          </div>
+
+          <div class="timeline-body" id="timelineBody" aria-live="polite">
+            <!-- 由 JS 建立：時間軸 -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 待辦＆住宿 -->
+      <section id="todo" aria-label="待辦與住宿資訊">
+        <div class="section-title">
+          <h2>待辦清單＆住宿資訊</h2>
+          <div class="hint">你可以自己勾勾看～</div>
+        </div>
+
+        <div class="two-col">
+          <!-- 待辦 -->
+          <div class="card checklist" role="region" aria-label="待辦清單">
+            <div class="checklist-header">
+              <strong>待辦清單</strong>
+              <span>可打勾</span>
+            </div>
+
+            <div class="checks" id="checks">
+              <!-- 由 JS 建立 -->
+            </div>
+          </div>
+
+          <!-- 住宿 -->
+          <div class="card stay" role="region" aria-label="住宿資訊">
+            <div class="header">
+              <strong>住宿資訊</strong>
+              <div class="pill">貼心小摘要</div>
+            </div>
+
+            <div class="stay-grid" id="stayGrid">
+              <!-- 由 JS 建立 -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div class="footer-note">
+          提示：若你的行動裝置開啟「減少動態效果」，插圖與彈跳會自動減少/停用。<br/>
+          <b>你只要把程式中的行程資料替換成自己的，就能快速做成專屬旅遊網站。</b>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // ====== 行程資料（你可在此替換成自己的內容） ======
+    const travelData = {
+      tripTitle: "東京風景小冒險",
+      tripSubtitle: "三天兩夜，搭著交通小夥伴，一站一站打卡「必去」。",
+      // 出發倒數用（設定為你實際出發日期）
+      departureISO: "2026-10-20T09:40:00+09:00",
+
+      days: [
+        {
+          dateLabel: "10/20（一）",
+          isoDate: "2026-10-20",
+          subtitle: "淺草與河畔散步，讓小地標先抱抱！",
+          items: [
+            {
+              time: "10:20",
+              transport: { label: "地鐵", color: "sea" },
+              place: "淺草寺周邊",
+              go: true,
+              desc: "先走一圈老街，再慢慢找角落拍照。",
+              bullets: ["帶水壺、注意人潮", "想拍雷門就抓光線的角度"]
+            },
+            {
+              time: "12:40",
+              transport: { label: "步行", color: "bamboo" },
+              place: "午餐：日式小店巡禮",
+              go: false,
+              desc: "用可愛套餐把肚子餵飽，下午才有力氣！",
+              bullets: ["先確認排隊規則", "點餐前看一下招牌品項"]
+            },
+            {
+              time: "15:10",
+              transport: { label: "電車", color: "sun" },
+              place: "晴空塔視野時段",
+              go: true,
+              desc: "把天空裝進照片裡的那種高度～",
+              bullets: ["提早到避免排隊", "挑有風的時刻會更有氛圍"]
+            },
+            {
+              time: "18:30",
+              transport: { label: "回飯店", color: "coral" },
+              place: "休息充電時間",
+              go: false,
+              desc: "整理戰利品、順便把隔天清單再確認一次。"
+            }
+          ]
+        },
+        {
+          dateLabel: "10/21（二）",
+          isoDate: "2026-10-21",
+          subtitle: "一整天的風景：塔與街角，都在同一張圖裡。",
+          items: [
+            {
+              time: "09:30",
+              transport: { label: "地鐵", color: "sea" },
+              place: "東京鐵塔周邊",
+              go: true,
+              desc: "今天的必去：把經典地標畫進你的日系繪本。"
+            },
+            {
+              time: "11:20",
+              transport: { label: "步行", color: "bamboo" },
+              place: "咖啡甜點時光",
+              go: false,
+              desc: "甜點要小小的就好，心情會剛剛好。"
+            },
+            {
+              time: "14:00",
+              transport: { label: "公車", color: "sun" },
+              place: "城市散步路線",
+              go: true,
+              desc: "沿路找最喜歡的色塊：珊瑚粉、山吹黃、水色與若竹綠。",
+              bullets: ["走慢一點，讓眼睛先收集風景", "每段路拍 3 張就夠"]
+            },
+            {
+              time: "19:00",
+              transport: { label: "晚餐", color: "coral" },
+              place: "溫柔的夜晚",
+              go: false,
+              desc: "吃完回去睡，明天才有能量繼續探索。"
+            }
+          ]
+        },
+        {
+          dateLabel: "10/22（三）",
+          isoDate: "2026-10-22",
+          subtitle: "最後一圈：把想去的都收進袋子裡。",
+          items: [
+            {
+              time: "08:50",
+              transport: { label: "步行", color: "bamboo" },
+              place: "晨間小散步",
+              go: false,
+              desc: "早上的光線最可愛，隨手就能拍到好看照片。"
+            },
+            {
+              time: "11:10",
+              transport: { label: "電車", color: "sun" },
+              place: "伴手禮補貨站（必去）",
+              go: true,
+              desc: "找一兩樣最喜歡的，就當作旅程的封面。"
+            },
+            {
+              time: "14:40",
+              transport: { label: "前往機場", color: "coral" },
+              place: "收尾與回家路",
+              go: true,
+              desc: "確認行李與登機資訊，然後把回憶帶回家。"
+            }
+          ]
+        }
+      ],
+
+      flights: [
+        // 目前已在 HTML 寫死示例；如果你要我把航班也改成由資料渲染，我也可以再幫你加
+      ],
+
+      todo: [
+        { id: "t1", text: "檢查護照/票券/轉乘資訊", meta: "出發前：今晚就做一次" },
+        { id: "t2", text: "充飽行動電源與手機離線地圖", meta: "省電小技巧：亮度稍微調低" },
+        { id: "t3", text: "準備 1 套拍照穿搭（可愛就好）", meta: "雨天備用：外套/帽子" },
+        { id: "t4", text: "整理行程截圖：必去清單置頂", meta: "到現場看一眼就不慌" }
+      ],
+
+      stay: [
+        {
+          name: "東京市區小旅宿（示例）",
+          period: "10/20–10/22（二晚）",
+          address: "距離地鐵約 6 分鐘步行（示例）",
+          notes: "入住時間/退房時間請以訂房確認信為準。"
+        }
+      ]
+    };
+
+    // ====== 減少動態效果支援 ======
+    const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const root = document.documentElement;
+    if (prefersReduced){
+      document.body.classList.add("reduce-motion");
+    }
+
+    // ====== 出發倒數 ======
+    const cd = {
+      days: document.getElementById("cdDays"),
+      hours: document.getElementById("cdHours"),
+      minutes: document.getElementById("cdMinutes"),
+      seconds: document.getElementById("cdSeconds")
+    };
+
+    function pad2(n){
+      return String(n).padStart(2, "0");
+    }
+
+    function updateCountdown(){
+      const target = new Date(travelData.departureISO);
+      const now = new Date();
+
+      const diffMs = target - now;
+
+      if (diffMs <= 0){
+        cd.days.textContent = "0";
+        cd.hours.textContent = "00";
+        cd.minutes.textContent = "00";
+        cd.seconds.textContent = "00";
+        return;
+      }
+
+      const totalSeconds = Math.floor(diffMs / 1000);
+      const days = Math.floor(totalSeconds / (3600*24));
+      const hours = Math.floor((totalSeconds % (3600*24)) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      cd.days.textContent = String(days);
+      cd.hours.textContent = pad2(hours);
+      cd.minutes.textContent = pad2(minutes);
+      cd.seconds.textContent = pad2(seconds);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 250);
+
+    // ====== 插圖輕輕動效 ======
+    const heroIllu = document.getElementById("heroIllustration");
+    const wrap = document.getElementById("heroIllustrationWrap");
+
+    // 透過 CSS 動畫啟用/停用（尊重 reduce motion）
+    if (!prefersReduced){
+      // 避免一次性全套都動太多：用不同延遲感覺更像手繪翻頁
+      const mount = document.getElementById("mountFuji");
+      const tower = document.getElementById("tokyoTower");
+      const train = document.getElementById("train");
+
+      if (mount) mount.style.animation = "floaty 3.8s ease-in-out infinite";
+      if (tower) tower.style.animation = "bobble 3.2s ease-in-out infinite";
+      if (train) train.style.animation = "floaty 4.2s ease-in-out infinite";
+
+      // 讓整張插圖有一點點呼吸感（可選）
+      if (wrap) wrap.style.transition = "transform .2s ease";
+    }
+
+    // ====== 建立每日行程 UI ======
+    const daySwitch = document.querySelector(".day-switch");
+    const timelineBody = document.getElementById("timelineBody");
+    const daySubtitle = document.getElementById("daySubtitle");
+
+    let activeDayIndex = 0;
+
+    function transportTagColor(color){
+      // color: coral | sun | sea | bamboo
+      return color || "sea";
+    }
+
+    function colorToMiniClass(color){
+      return "mini " + transportTagColor(color);
+    }
+
+    function renderDay(index, opts = { animate: true }){
+      activeDayIndex = index;
+      const day = travelData.days[index];
+
+      // 更新 subtitle
+      daySubtitle.textContent = day.subtitle || day.dateLabel;
+
+      // 彈跳動畫（日期切換）
+      if (opts.animate && !prefersReduced){
+        // 對時間軸內容區做一次彈跳
+        timelineBody.style.animation = "popBounce .42s ease both";
+        // 插圖也輕輕跳一下（更繪本）
+        wrap.style.animation = "popBounce .42s ease both";
+        setTimeout(() => {
+          timelineBody.style.animation = "";
+          wrap.style.animation = "";
+        }, 500);
+      }
+
+      // 切換日期按鈕選中狀態
+      const buttons = daySwitch.querySelectorAll(".day-btn");
+      buttons.forEach((b, i) => b.setAttribute("aria-selected", String(i === index)));
+
+      // 建立時間軸
+      timelineBody.innerHTML = "";
+
+      day.items.forEach((it, i) => {
+        const itemWrap = document.createElement("div");
+        itemWrap.className = "timeline-item";
+
+        // 左側點
+        const dot = document.createElement("div");
+        dot.className = "t-dot";
+        const c = document.createElement("div");
+        c.className = "circle";
+        // 點的顏色可以跟交通小標籤同色，讓整體更一致
+        const dotColor = transportTagColor(it.transport?.color);
+        c.style.setProperty("--dotcolor", "var(--sea)");
+        // 用 inline style 控制 after 的顏色（仍使用指定配色）
+        const afterColor =
+          dotColor === "coral" ? "rgba(242,164,151,0.35)" :
+          dotColor === "sun" ? "rgba(246,210,122,0.35)" :
+          dotColor === "bamboo" ? "rgba(185,218,165,0.35)" :
+          "rgba(168,211,230,0.35)";
+        c.style.background = "var(--paper)";
+        // 設定 after 用 CSS 變更比較麻煩，改成讓 circle 外框與內部深淺視覺即可
+        c.style.boxShadow = "inset 0 0 0 10px " + afterColor;
+
+        dot.appendChild(c);
+
+        // 右側卡片
+        const card = document.createElement("div");
+        card.className = "t-card";
+
+        const head = document.createElement("div");
+        head.className = "t-head";
+
+        const timePill = document.createElement("div");
+        timePill.className = "t-time";
+        timePill.textContent = it.time || "";
+
+        const transWrap = document.createElement("div");
+        transWrap.className = "t-transport";
+
+        const mini = document.createElement("span");
+        mini.className = colorToMiniClass(it.transport?.color);
+        mini.textContent = it.transport?.label || "交通";
+
+        transWrap.appendChild(mini);
+
+        head.appendChild(timePill);
+        head.appendChild(transWrap);
+
+        const place = document.createElement("div");
+        place.className = "t-place";
+
+        const placeName = document.createElement("strong");
+        placeName.textContent = it.place || "";
+
+        place.appendChild(placeName);
+
+        if (it.go){
+          const goBadge = document.createElement("span");
+          goBadge.className = "badge-go";
+          // 可愛圖示：小章章
+          goBadge.innerHTML = '<span aria-hidden="true">☆</span> 必去';
+          place.appendChild(goBadge);
+        }
+
+        const desc = document.createElement("div");
+        desc.className = "t-desc";
+        desc.textContent = it.desc || "";
+
+        card.appendChild(head);
+        card.appendChild(place);
+        card.appendChild(desc);
+
+        if (it.bullets && it.bullets.length){
+          const ul = document.createElement("ul");
+          ul.className = "t-bullets";
+          it.bullets.forEach(b => {
+            const li = document.createElement("li");
+            li.textContent = b;
+            ul.appendChild(li);
+          });
+          card.appendChild(ul);
+        }
+
+        itemWrap.appendChild(dot);
+        itemWrap.appendChild(card);
+
+        timelineBody.appendChild(itemWrap);
+      });
+    }
+
+    function initDaySwitch(){
+      daySwitch.innerHTML = "";
+      travelData.days.forEach((d, i) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "day-btn";
+        btn.setAttribute("role", "tab");
+        btn.setAttribute("aria-selected", String(i === activeDayIndex));
+        btn.textContent = d.dateLabel;
+
+        btn.addEventListener("click", () => {
+          renderDay(i, { animate: true });
+        });
+
+        daySwitch.appendChild(btn);
+      });
+      renderDay(activeDayIndex, { animate: false });
+    }
+
+    initDaySwitch();
+
+    // ====== 待辦清單（本機不使用 localStorage，避免在沙盒環境不穩；刷新會重置）=====
+    const checks = document.getElementById("checks");
+    function renderTodos(){
+      checks.innerHTML = "";
+      travelData.todo.forEach((t) => {
+        const item = document.createElement("div");
+        item.className = "check-item";
+
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.id = t.id;
+
+        const label = document.createElement("label");
+        label.setAttribute("for", t.id);
+        label.textContent = t.text;
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        const span = document.createElement("span");
+        span.textContent = t.meta || "";
+        meta.appendChild(span);
+
+        const right = document.createElement("div");
+        right.style.flex = "1 1 auto";
+        right.appendChild(label);
+        if (t.meta) right.appendChild(meta);
+
+        item.appendChild(input);
+        item.appendChild(right);
+
+        checks.appendChild(item);
+      });
+    }
+    renderTodos();
+
+    // 重置待辦勾勾
+    document.getElementById("resetChecksBtn").addEventListener("click", () => {
+      const inputs = checks.querySelectorAll('input[type="checkbox"]');
+      inputs.forEach(ch => ch.checked = false);
+    });
+
+    // ====== 住宿資訊 ======
+    const stayGrid = document.getElementById("stayGrid");
+    function renderStay(){
+      stayGrid.innerHTML = "";
+      travelData.stay.forEach((s) => {
+        const card = document.createElement("div");
+        card.className = "stay-card";
+
+        const row = document.createElement("div");
+        row.className = "row";
+
+        const left = document.createElement("div");
+        const name = document.createElement("strong");
+        name.textContent = s.name || "住宿（示例）";
+        left.appendChild(name);
+
+        const period = document.createElement("div");
+        period.className = "small";
+        period.textContent = s.period ? "期間： " + s.period : "";
+
+        left.appendChild(period);
+
+        const rightTag = document.createElement("div");
+        rightTag.className = "tag sea";
+        rightTag.textContent = "住宿資訊";
+
+        row.appendChild(left);
+        row.appendChild(rightTag);
+
+        const addr = document.createElement("div");
+        addr.className = "small";
+        addr.textContent = (s.address ? s.address : "");
+
+        const notes = document.createElement("div");
+        notes.className = "small";
+        notes.textContent = (s.notes ? "備註： " + s.notes : "");
+
+        card.appendChild(row);
+        card.appendChild(addr);
+        card.appendChild(notes);
+
+        stayGrid.appendChild(card);
+      });
+    }
+    renderStay();
+
+    // ====== 套用標題文案 ======
+    document.getElementById("tripTitle").textContent = travelData.tripTitle || document.getElementById("tripTitle").textContent;
+    document.getElementById("tripSubtitle").textContent = travelData.tripSubtitle || document.getElementById("tripSubtitle").textContent;
+
+    // 錯誤防呆：倒數若目標日期無效
+    (function validateDeparture(){
+      const d = new Date(travelData.departureISO);
+      if (isNaN(d.getTime())){
+        cd.days.textContent = "--";
+        cd.hours.textContent = "--";
+        cd.minutes.textContent = "--";
+        cd.seconds.textContent = "--";
+      }
+    })();
+  </script>
+</body>
+</html>
