@@ -864,7 +864,7 @@
       <section id="flights" aria-label="航班資訊">
         <div class="section-title">
           <h2>航班卡片</h2>
-          <div class="hint">示例資料：你可以把內容替換成自己的航班</div>
+          <div class="hint">溫馨提示：回程行李32kg哦~</div>
         </div>
 
         <div class="grid-2">
@@ -881,8 +881,9 @@
                 <div class="flight-meta">
                   <strong>去程</strong>
                   <div class="line">
-                    <span><b>航班：</b>UO686</span>
+                    <span><b>香港快運</b>UO686</span>
                     <span><b>座位：</b>不是GAP山旁</span>
+                    <span>香港國際機場 客運大樓 2</span>
                   </div>
                 </div>
               </div>
@@ -895,15 +896,19 @@
             <div class="flight-body">
               <div class="flight-row">
                 <span>出發</span>
-                <b>2026/10/20 09:40</b>
+                <b>2026/12/31 08:30</b>
               </div>
               <div class="flight-row">
                 <span>地點</span>
-                <b>TPE → NRT</b>
+                <b>HKG → KIX</b>
+              </div>
+               <div class="flight-row">
+                <span>歷時</span>
+                <b>3h 35m</b>
               </div>
               <div class="flight-row">
                 <span>預計抵達</span>
-                <b>2026/10/20 15:10</b>
+                <b>2026/12/31 13:05</b>
               </div>
             </div>
           </div>
@@ -921,29 +926,33 @@
                 <div class="flight-meta">
                   <strong>回程</strong>
                   <div class="line">
-                    <span><b>航班：</b>BR 109</span>
-                    <span><b>座位：</b>經濟艙</span>
+                    <span><b>香港快運</b>UO889</span>
+                    <span><b>座位：</b>冇得訓個位</span>
                   </div>
                 </div>
               </div>
 
               <div class="tag coral" aria-label="時段標籤">
-                <span aria-hidden="true">🌙</span> 晚上
+                <span aria-hidden="true">🌙</span> 老夜
               </div>
             </div>
 
             <div class="flight-body">
               <div class="flight-row">
                 <span>出發</span>
-                <b>2026/10/22 19:30</b>
+                <b>2027/01/05 17:20</b>
               </div>
               <div class="flight-row">
                 <span>地點</span>
-                <b>NRT → TPE</b>
+                <b>KIX → HKG</b>
+              </div>
+              <div class="flight-row">
+                <span>歷時</span>
+                <b>4h 40m</b>
               </div>
               <div class="flight-row">
                 <span>預計抵達</span>
-                <b>2026/10/23 00:20</b>
+                <b>2027/01/05 21:00</b>
               </div>
             </div>
           </div>
@@ -954,7 +963,7 @@
       <section id="schedule" aria-label="每日行程">
         <div class="section-title">
           <h2>每日行程</h2>
-          <div class="hint">日期切換會有彈跳效果（支援減少動態）</div>
+          <div class="hint">溫馨提示：未諗到</div>
         </div>
 
         <div class="card timeline" role="region" aria-label="時間軸與行程">
@@ -1028,8 +1037,8 @@
 
       days: [
         {
-          dateLabel: "10/20（一）",
-          isoDate: "2026-10-20",
+          dateLabel: "31/12（四）",
+          isoDate: "2026-12-31",
           subtitle: "淺草與河畔散步，讓小地標先抱抱！",
           items: [
             {
@@ -1065,9 +1074,10 @@
             }
           ]
         },
+        
         {
-          dateLabel: "10/21（二）",
-          isoDate: "2026-10-21",
+          dateLabel: "01/01（五）",
+          isoDate: "2027-01-01",
           subtitle: "一整天的風景：塔與街角，都在同一張圖裡。",
           items: [
             {
@@ -1101,9 +1111,100 @@
             }
           ]
         },
+        
         {
-          dateLabel: "10/22（三）",
-          isoDate: "2026-10-22",
+          dateLabel: "02/01（六）",
+          isoDate: "2027-01-02",
+          subtitle: "最後一圈：把想去的都收進袋子裡。",
+          items: [
+            {
+              time: "08:50",
+              transport: { label: "步行", color: "bamboo" },
+              place: "晨間小散步",
+              go: false,
+              desc: "早上的光線最可愛，隨手就能拍到好看照片。"
+            },
+            {
+              time: "11:10",
+              transport: { label: "電車", color: "sun" },
+              place: "伴手禮補貨站（必去）",
+              go: true,
+              desc: "找一兩樣最喜歡的，就當作旅程的封面。"
+            },
+            {
+              time: "14:40",
+              transport: { label: "前往機場", color: "coral" },
+              place: "收尾與回家路",
+              go: true,
+              desc: "確認行李與登機資訊，然後把回憶帶回家。"
+            }
+          ]
+        }
+      ],
+
+       {
+          dateLabel: "03/01（日）",
+          isoDate: "2027-01-03",
+          subtitle: "最後一圈：把想去的都收進袋子裡。",
+          items: [
+            {
+              time: "08:50",
+              transport: { label: "步行", color: "bamboo" },
+              place: "晨間小散步",
+              go: false,
+              desc: "早上的光線最可愛，隨手就能拍到好看照片。"
+            },
+            {
+              time: "11:10",
+              transport: { label: "電車", color: "sun" },
+              place: "伴手禮補貨站（必去）",
+              go: true,
+              desc: "找一兩樣最喜歡的，就當作旅程的封面。"
+            },
+            {
+              time: "14:40",
+              transport: { label: "前往機場", color: "coral" },
+              place: "收尾與回家路",
+              go: true,
+              desc: "確認行李與登機資訊，然後把回憶帶回家。"
+            }
+          ]
+        }
+      ],
+        
+     {
+          dateLabel: "04/01（一）",
+          isoDate: "2027-01-04",
+          subtitle: "最後一圈：把想去的都收進袋子裡。",
+          items: [
+            {
+              time: "08:50",
+              transport: { label: "步行", color: "bamboo" },
+              place: "晨間小散步",
+              go: false,
+              desc: "早上的光線最可愛，隨手就能拍到好看照片。"
+            },
+            {
+              time: "11:10",
+              transport: { label: "電車", color: "sun" },
+              place: "伴手禮補貨站（必去）",
+              go: true,
+              desc: "找一兩樣最喜歡的，就當作旅程的封面。"
+            },
+            {
+              time: "14:40",
+              transport: { label: "前往機場", color: "coral" },
+              place: "收尾與回家路",
+              go: true,
+              desc: "確認行李與登機資訊，然後把回憶帶回家。"
+            }
+          ]
+        }
+      ],
+        
+     {
+          dateLabel: "05/01（二）",
+          isoDate: "2027-01-05",
           subtitle: "最後一圈：把想去的都收進袋子裡。",
           items: [
             {
