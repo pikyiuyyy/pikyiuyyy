@@ -880,8 +880,10 @@
                 <div class="flight-meta">
                   <strong>去程</strong>
                   <div class="line">
-                    <span><b>香港快運</b>UO686</span>
+                    <span><b>香港快運</b> UO686</span>
                     <span><b>座位：</b>訓教位</span>
+                  </div>
+                  <div class="line">
                     <span>香港國際機場 客運大樓2</span>
                   </div>
                 </div>
@@ -894,7 +896,7 @@
 
             <div class="flight-body">
               <div class="flight-row">
-                <span>出發</span>
+                <span>幾點機</span>
                 <b>2026/12/31 (THU) 08:30</b>
               </div>
               <div class="flight-row">
@@ -902,7 +904,11 @@
                 <b>HKG → KIX</b>
               </div>
               <div class="flight-row">
-                <span>預計抵達</span>
+                <span>搭幾耐</span>
+                <b>3h 35m</b>
+              </div>
+              <div class="flight-row">
+                <span>落機</span>
                 <b>2026/12/31 (THU) 13:05</b>
               </div>
             </div>
@@ -921,7 +927,7 @@
                 <div class="flight-meta">
                   <strong>回程</strong>
                   <div class="line">
-                    <span><b>香港快運</b>UO899</span>
+                    <span><b>香港快運</b> UO899</span>
                     <span><b>座位：</b>今次冇得訓</span>
                   </div>
                   <div class="line">
@@ -937,7 +943,7 @@
 
             <div class="flight-body">
               <div class="flight-row">
-                <span>出發</span>
+                <span>幾點機</span>
                 <b>20267/01/05 (TUE) 17:20</b>
               </div>
               <div class="flight-row">
@@ -945,7 +951,11 @@
                 <b>KIX → HKG</b>
               </div>
               <div class="flight-row">
-                <span>預計抵達</span>
+                <span></span>搭機耐
+                <b>4h 40m(唔好問 唔知道)</b>
+              </div>
+              <div class="flight-row">
+                <span>落機</span>
                 <b>2027/01/05 (TUE) 21:00</b>
               </div>
             </div>
@@ -957,7 +967,7 @@
       <section id="schedule" aria-label="每日行程">
         <div class="section-title">
           <h2>每日行程</h2>
-          <div class="hint">日期切換會有彈跳效果（支援減少動態）</div>
+          <div class="hint">溫馨提示：未諗到</div>
         </div>
 
         <div class="card timeline" role="region" aria-label="時間軸與行程">
@@ -1024,15 +1034,15 @@
   <script>
     // ====== 行程資料（你可在此替換成自己的內容） ======
     const travelData = {
-      tripTitle: "東京風景小冒險",
-      tripSubtitle: "三天兩夜，搭著交通小夥伴，一站一站打卡「必去」。",
+      tripTitle: "大阪小冒險",
+      tripSubtitle: "早起的鳥兒有蟲吃",
       // 出發倒數用（設定為你實際出發日期）
       departureISO: "2026-12-31T08:30:00+08:00",
 
       days: [
         {
-          dateLabel: "10/20（一）",
-          isoDate: "2026-10-20",
+          dateLabel: "12/31（四）",
+          isoDate: "2026-12-31",
           subtitle: "淺草與河畔散步，讓小地標先抱抱！",
           items: [
             {
@@ -1069,8 +1079,8 @@
           ]
         },
         {
-          dateLabel: "10/21（二）",
-          isoDate: "2026-10-21",
+          dateLabel: "01/01（五）",
+          isoDate: "2027-01-01",
           subtitle: "一整天的風景：塔與街角，都在同一張圖裡。",
           items: [
             {
@@ -1105,8 +1115,8 @@
           ]
         },
         {
-          dateLabel: "10/22（三）",
-          isoDate: "2026-10-22",
+          dateLabel: "02/01（六）",
+          isoDate: "2027-01-02",
           subtitle: "最後一圈：把想去的都收進袋子裡。",
           items: [
             {
@@ -1133,8 +1143,8 @@
           ]
         },
         {
-          dateLabel: "10/22（三）",
-          isoDate: "2026-10-22",
+          dateLabel: "03/01（日）",
+          isoDate: "2027-01-03",
           subtitle: "最後一圈：把想去的都收進袋子裡。",
           items: [
             {
@@ -1161,8 +1171,36 @@
           ]
         },
         {
-          dateLabel: "10/22（三）",
-          isoDate: "2026-10-22",
+          dateLabel: "04/01（一）",
+          isoDate: "2027-01-04",
+          subtitle: "最後一圈：把想去的都收進袋子裡。",
+          items: [
+            {
+              time: "08:50",
+              transport: { label: "步行", color: "bamboo" },
+              place: "晨間小散步",
+              go: false,
+              desc: "早上的光線最可愛，隨手就能拍到好看照片。"
+            },
+            {
+              time: "11:10",
+              transport: { label: "電車", color: "sun" },
+              place: "伴手禮補貨站（必去）",
+              go: true,
+              desc: "找一兩樣最喜歡的，就當作旅程的封面。"
+            },
+            {
+              time: "14:40",
+              transport: { label: "前往機場", color: "coral" },
+              place: "收尾與回家路",
+              go: true,
+              desc: "確認行李與登機資訊，然後把回憶帶回家。"
+            }
+          ]
+        },
+        {
+          dateLabel: "05/01（二）",
+          isoDate: "2027-01-05",
           subtitle: "最後一圈：把想去的都收進袋子裡。",
           items: [
             {
@@ -1203,10 +1241,10 @@
 
       stay: [
         {
-          name: "東京市區小旅宿（示例）",
-          period: "10/20–10/22（二晚）",
-          address: "距離地鐵約 6 分鐘步行（示例）",
-          notes: "入住時間/退房時間請以訂房確認信為準。"
+          name: "無名, 樓下有間咩DVD",
+          period: "31/12–05/01（五晚）",
+          address: "難波西口5號 大柏子筋、蔵前通交界",
+          notes: "16:00入住 | 11:00退房"
         }
       ]
     };
