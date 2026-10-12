@@ -951,7 +951,7 @@
                 <b>KIX → HKG</b>
               </div>
               <div class="flight-row">
-                <span></span>搭機耐
+                <span>搭幾耐</span>
                 <b>4h 40m(唔好問 唔知道)</b>
               </div>
               <div class="flight-row">
@@ -1536,7 +1536,31 @@
         rightTag.textContent = "住宿資訊";
 
         row.appendChild(left);
-        row.appendChild(rightTag);
+        // 右側：連結圈圈（只要有 linkUrl 就顯示）
+        const hasLink = s.linkUrl && String(s.linkUrl).trim().length > 0;
+
+        if (hasLink){
+          const link = document.createElement("a");
+          link.className = "circle-link";
+          link.href = "[https://www.airbnb.com.hk/rooms/1594685583488610432?unique_share_id=f000fcfb-ce78-4847-84ae-fd8583f52d9d&viralityEntryPoint=1&s=76](https://www.airbnb.com.hk/rooms/1594685583488610432?unique_share_id=f000fcfb-ce78-4847-84ae-fd8583f52d9d&viralityEntryPoint=1&s=76)";
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+
+          const labelText = s.linkLabel || "住宿連結";
+          link.setAttribute("aria-label", labelText);
+
+          link.title = labelText;
+
+          // SVG：外圈箭頭（自己畫）
+          link.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M8 12a4 4 0 0 1 4-4h6" stroke="#3E3A39" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M16 6l2 2-2 2" stroke="#3E3A39" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-6" stroke="#3E3A39" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          `;
+          row.appendChild(link);
+        }
 
         const addr = document.createElement("div");
         addr.className = "small";
@@ -1555,20 +1579,8 @@
     }
     renderStay();
 
-    // ====== 套用標題文案 ======
     document.getElementById("tripTitle").textContent = travelData.tripTitle || document.getElementById("tripTitle").textContent;
     document.getElementById("tripSubtitle").textContent = travelData.tripSubtitle || document.getElementById("tripSubtitle").textContent;
-
-    // 錯誤防呆：倒數若目標日期無效
-    (function validateDeparture(){
-      const d = new Date(travelData.departureISO);
-      if (isNaN(d.getTime())){
-        cd.days.textContent = "--";
-        cd.hours.textContent = "--";
-        cd.minutes.textContent = "--";
-        cd.seconds.textContent = "--";
-      }
-    })();
   </script>
 </body>
 </html>
