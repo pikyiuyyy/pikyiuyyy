@@ -1468,7 +1468,7 @@
 
     initDaySwitch();
 
-    // ====== 待辦清單（本機不使用 localStorage，避免在沙盒環境不穩；刷新會重置）=====
+     // 待辦
     const checks = document.getElementById("checks");
     function renderTodos(){
       checks.innerHTML = "";
@@ -1490,27 +1490,26 @@
         span.textContent = t.meta || "";
         meta.appendChild(span);
 
+        item.appendChild(input);
         const right = document.createElement("div");
         right.style.flex = "1 1 auto";
         right.appendChild(label);
         if (t.meta) right.appendChild(meta);
 
-        item.appendChild(input);
         item.appendChild(right);
-
         checks.appendChild(item);
       });
     }
     renderTodos();
 
-    // 重置待辦勾勾
     document.getElementById("resetChecksBtn").addEventListener("click", () => {
       const inputs = checks.querySelectorAll('input[type="checkbox"]');
       inputs.forEach(ch => ch.checked = false);
     });
 
-    // ====== 住宿資訊 ======
+    // ✅ 住宿資訊 + 「外圈圓圈」連結
     const stayGrid = document.getElementById("stayGrid");
+
     function renderStay(){
       stayGrid.innerHTML = "";
       travelData.stay.forEach((s) => {
@@ -1528,12 +1527,7 @@
         const period = document.createElement("div");
         period.className = "small";
         period.textContent = s.period ? "期間： " + s.period : "";
-
         left.appendChild(period);
-
-        const rightTag = document.createElement("div");
-        rightTag.className = "tag sea";
-        rightTag.textContent = "住宿資訊";
 
         row.appendChild(left);
         // 右側：連結圈圈（只要有 linkUrl 就顯示）
