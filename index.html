@@ -1530,13 +1530,14 @@
         left.appendChild(period);
 
         row.appendChild(left);
+
         // 右側：連結圈圈（只要有 linkUrl 就顯示）
         const hasLink = s.linkUrl && String(s.linkUrl).trim().length > 0;
 
         if (hasLink){
           const link = document.createElement("a");
           link.className = "circle-link";
-          link.href = s.linkUrl: "https://www.airbnb.com.hk/rooms/1594685583488610432?unique_share_id=f000fcfb-ce78-4847-84ae-fd8583f52d9d&viralityEntryPoint=1&s=76";
+          link.href = s.linkUrl"https://www.airbnb.com.hk/rooms/1594685583488610432?unique_share_id=f000fcfb-ce78-4847-84ae-fd8583f52d9d&viralityEntryPoint=1&s=76";
           link.target = "_blank";
           link.rel = "noopener noreferrer";
 
