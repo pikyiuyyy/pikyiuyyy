@@ -1091,7 +1091,7 @@
               transport: { label: "涮涮鍋 壽喜燒 螃蟹吃到飽", color: "coral" },
               place: "大阪府大阪市中央区心斎橋筋1-3-13 茶茶心斎橋ビル 6F",
               go: false,
-              desc: ["呢御堂筋線 心齋橋站 5號出口", "長堀鶴見綠地線 心齋橋站 5號出口", "堺筋線 長堀橋站 7號出口"]
+              desc: ["呢御堂筋線 心齋橋站 5號出口\n長堀鶴見綠地線 心齋橋站 5號出口\n堺筋線 長堀橋站 7號出口"]
             }
           ]
         },
@@ -1444,7 +1444,8 @@
 
         const desc = document.createElement("div");
         desc.className = "t-desc";
-        desc.innerHTML = it.desc ? it.desc.join("<br>") : ""; 
+        desc.textContent = it.desc || ""; 
+        desc.style.whiteSpace = "pre-line"; 
 
         card.appendChild(head);
         card.appendChild(place);
