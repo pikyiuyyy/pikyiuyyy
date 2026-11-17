@@ -1580,7 +1580,7 @@
 
         const addr = document.createElement("div");
         addr.className = "small";
-        addr.textContent = (s.address ? "位置： " + s.address : "");
+        addr.innerHTML = s.address ? "位置：<br>" + s.address.join("<br>") : "";
 
         const notes = document.createElement("div");
         notes.className = "small";
