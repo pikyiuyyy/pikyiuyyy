@@ -1260,7 +1260,8 @@
         {
           name: "無名, 樓下有間咩DVD",
           period: "31/12–05/01（五晚）",
-          address: ["難波站 西口5號 (大柏子筋、蔵前通交界) ",
+          address: ["難波站 西口5號 (大柏子筋、蔵前通交界)",
+          
                     "藍色-四つ橋線(Y15) ",
                     "粉紅色-千日前線(S16) ",
                     "紅色-御堂筋線(M20) ",
@@ -1585,6 +1586,10 @@
         const addr = document.createElement("div");
         addr.className = "small";
         addr.textContent = (s.address ? "位置： " + s.address : "");
+
+        const next = document.createElement("div");
+        next.className = "small";
+        next.textContent = (s.next ? "      " + s.next : "");
 
         const notes = document.createElement("div");
         notes.className = "small";
